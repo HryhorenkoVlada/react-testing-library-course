@@ -1,5 +1,8 @@
-import { render, screen, cleanup } from '@testing-library/react';
-import {} from '@testing-library/user-event/dist/utils';
+import {
+  render,
+  screen,
+  cleanup,
+} from '../../../test-utils/testing-library-utils';
 
 import Options from '../Options';
 
@@ -22,7 +25,6 @@ test('displays image for each topping option from server', async () => {
   render(<Options optionType="toppings" />);
 
   //find the images
-
   const toppingsImages = await screen.findAllByRole('img', {
     name: /topping$/i,
   });

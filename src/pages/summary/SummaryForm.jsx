@@ -4,8 +4,13 @@ import { Button, Form, Popover, OverlayTrigger } from 'react-bootstrap';
 const SummaryForm = () => {
   const [toChecked, setToChecked] = useState(false);
 
+  const handleChange = (e) => {
+    // e.preventDefault();
+    setToChecked(e.target.checked);
+  };
+
   const popover = (
-    <Popover id="popover-basic">
+    <Popover id="popover-trigger-click">
       <Popover.Body>No ice cream will actually be delivered</Popover.Body>
     </Popover>
   );
@@ -14,7 +19,7 @@ const SummaryForm = () => {
     <span>
       {' '}
       I agree to{' '}
-      <OverlayTrigger placement="right" overlay={popover}>
+      <OverlayTrigger trigger="click" placement="right" overlay={popover}>
         <span style={{ color: 'blue' }}>Terms and Conditions</span>
       </OverlayTrigger>
     </span>
@@ -27,7 +32,7 @@ const SummaryForm = () => {
           id="terms-and-conditions-checkbox"
           type="checkbox"
           checked={toChecked}
-          onChange={(e) => setToChecked(e.target.checked)}
+          onChange={handleChange}
           label={checkboxLabel}
         />
       </Form.Group>

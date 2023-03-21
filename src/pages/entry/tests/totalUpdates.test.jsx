@@ -1,4 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+} from '../../../test-utils/testing-library-utils';
 import userEvent from '@testing-library/user-event';
 
 import Options from '../Options';
@@ -18,7 +22,9 @@ test('update scoop subtotal when scoops change', async () => {
   userEvent.clear(vanillaInput);
   userEvent.type(vanillaInput, '1');
 
-  expect(scoopSubtotal).toHaveTextContent('2.00');
+  await waitFor(() => {
+    expect(scoopSubtotal).toHaveTextContent('2.00');
+  });
 
   // update chocolate scoops to 2 and check the subtotal
 
@@ -29,5 +35,7 @@ test('update scoop subtotal when scoops change', async () => {
   userEvent.clear(chocolateInput);
   userEvent.type(chocolateInput, '2');
 
-  expect(scoopSubtotal).toHaveTextContent('6.00');
+  await waitFor(() => {
+    expect(scoopSubtotal).toHaveTextContent('6.00');
+  });
 });
