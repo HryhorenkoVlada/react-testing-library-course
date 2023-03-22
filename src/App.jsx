@@ -10,8 +10,8 @@ function App() {
       <OrderDetailsProvider>
         {/* Summary page and Entry page need to be inside a provider */}
 
-        {/* <OrderEntry /> */}
-        <SummaryForm />
+        <OrderEntry />
+        {/* <SummaryForm /> */}
       </OrderDetailsProvider>
       {/* TODO: add confirmation page here */}
     </Container>

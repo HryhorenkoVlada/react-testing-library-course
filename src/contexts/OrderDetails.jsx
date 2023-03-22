@@ -1,22 +1,12 @@
 import { createContext, useContext, useState, useMemo, useEffect } from 'react';
 
+import { formatCurrency } from '../utilities';
 import { PRICE_PER_ITEM } from '../constants';
-
-// format number as currency
-function formatCurrency(amount) {
-  let validateAmount = amount;
-  if (Number.isNaN(amount)) validateAmount = 0;
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 2,
-  }).format(validateAmount);
-}
 
 const OrderDetailsContext = createContext();
 
 // create custom hook to check whether we're inside a provider
-export function useOrderDetails() {
+export const useOrderDetails = () => {
   const context = useContext(OrderDetailsContext);
 
   if (!context) {
@@ -26,18 +16,21 @@ export function useOrderDetails() {
   }
 
   return context;
-}
+};
 
 const calculateSubtotal = (optionType, optionCounts) => {
   let optionCount = 0;
-  optionCounts[optionType].forEach((element) => {
-    optionCount += element;
-  });
+
+  if (optionCounts[optionType].size) {
+    for (let value of optionCounts[optionType].values()) {
+      optionCount += value;
+    }
+  }
 
   return optionCount * PRICE_PER_ITEM[optionType];
 };
 
-export function OrderDetailsProvider(props) {
+export const OrderDetailsProvider = (props) => {
   const [optionCounts, setOptionsCounts] = useState({
     scoops: new Map(),
     toppings: new Map(),
@@ -62,14 +55,14 @@ export function OrderDetailsProvider(props) {
   }, [optionCounts]);
 
   const value = useMemo(() => {
-    function updatedItemCount(itemName, newItemCount, optionType) {
+    const updatedItemCount = (itemName, newItemCount, optionType) => {
       const newOptionsCounts = { ...optionCounts };
 
       const optionCountsMap = optionCounts[optionType];
       optionCountsMap.set(itemName, parseInt(newItemCount));
 
       setOptionsCounts(newOptionsCounts);
-    }
+    };
 
     // getter: object containing option counts for scoops and toppings, subtotals and
     // setter: updateOptionCount
@@ -77,4 +70,4 @@ export function OrderDetailsProvider(props) {
   }, [optionCounts, totals]);
 
   return <OrderDetailsContext.Provider value={value} {...props} />;
-}
+};

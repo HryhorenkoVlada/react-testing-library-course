@@ -6,10 +6,12 @@ import ScoopOption from './ScoopOption';
 import ToppingOption from './ToppingOption';
 import AlertBanner from '../common/AlertBanner';
 
+import { formatCurrency } from '../../utilities';
 import { useOrderDetails } from '../../contexts/OrderDetails';
 import { PRICE_PER_ITEM } from '../../constants';
 
 const Options = ({ optionType }) => {
+  const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const [error, setError] = useState(false);
 
@@ -17,9 +19,13 @@ const Options = ({ optionType }) => {
 
   useEffect(() => {
     const fetchOption = async () => {
+      setLoading(true);
       await axios
         .get(`http://localhost:3030/${optionType}`)
-        .then((res) => setOptions(res.data))
+        .then((res) => {
+          setOptions(res.data);
+          setLoading(false);
+        })
         .catch((err) => {
           setError(true);
         });
@@ -38,15 +44,17 @@ const Options = ({ optionType }) => {
   const ItemComponent = optionType === 'scoops' ? ScoopOption : ToppingOption;
   const title = optionType[0].toUpperCase() + optionType.slice(1).toLowerCase();
 
-  return (
+  return loading ? (
+    <h2>Loading...</h2>
+  ) : (
     <>
       <h2>{title}</h2>
-      <p>{PRICE_PER_ITEM[optionType]} each</p>
+      <p>{formatCurrency(PRICE_PER_ITEM[optionType])} each</p>
       <p>
-        {title} total: {orderDetails.totals[optionType]}
+        {title} total: {orderDetails?.totals[optionType]}
       </p>
       <Row>
-        {options.map((item) => (
+        {options?.map((item) => (
           <ItemComponent
             key={item.name}
             name={item.name}
