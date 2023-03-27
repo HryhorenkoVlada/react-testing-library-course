@@ -1,16 +1,26 @@
+import { Button } from 'react-bootstrap';
+
 import Options from './Options';
 import { useOrderDetails } from '../../contexts/OrderDetails';
 
-const OrderEntry = () => {
+const OrderEntry = ({ setOrderPhase }) => {
   const [orderDetails] = useOrderDetails();
 
+  const handleNextClick = () => {
+    setOrderPhase('review');
+  };
+
   return (
-    <div>
+    <div style={{ padding: '40px 0px', marginBottom: '40px' }}>
+      <h1>Design Your Sundae!</h1>
       <Options optionType="scoops" />
       <Options optionType="toppings" />
-      <h2 style={{ marginTop: '20px' }}>
+      <h2 style={{ marginTop: '20px', marginBottom: '20px' }}>
         Grand total: {orderDetails?.totals.grandTotal}
       </h2>
+      <Button variant="primary" type="button" onClick={handleNextClick}>
+        Order Sundae!
+      </Button>
     </div>
   );
 };

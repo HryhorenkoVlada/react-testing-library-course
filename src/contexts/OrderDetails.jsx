@@ -64,10 +64,24 @@ export const OrderDetailsProvider = (props) => {
       setOptionsCounts(newOptionsCounts);
     };
 
+    const resetOrder = () => {
+      setOptionsCounts({
+        scoops: new Map(),
+        toppings: new Map(),
+      });
+
+      // TODO: check if it necessary to do this operation here
+      setTotals({
+        scoops: zeroCurrency,
+        toppings: zeroCurrency,
+        grandTotal: zeroCurrency,
+      });
+    };
+
     // getter: object containing option counts for scoops and toppings, subtotals and
     // setter: updateOptionCount
-    return [{ ...optionCounts, totals }, updatedItemCount];
-  }, [optionCounts, totals]);
+    return [{ ...optionCounts, totals }, updatedItemCount, resetOrder];
+  }, [optionCounts, totals, zeroCurrency]);
 
   return <OrderDetailsContext.Provider value={value} {...props} />;
 };

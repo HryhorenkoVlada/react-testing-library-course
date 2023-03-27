@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { Button, Form, Popover, OverlayTrigger } from 'react-bootstrap';
 
-const SummaryForm = () => {
+const SummaryForm = ({ setOrderPhase }) => {
   const [toChecked, setToChecked] = useState(false);
 
   const handleChange = (e) => {
-    // e.preventDefault();
     setToChecked(e.target.checked);
+  };
+
+  const handleConfirmOrder = () => {
+    setOrderPhase('confirm');
   };
 
   const popover = (
@@ -27,16 +30,25 @@ const SummaryForm = () => {
 
   return (
     <Form>
-      <Form.Group controlId="terms-and-conditions">
+      <Form.Group
+        controlId="terms-and-conditions"
+        style={{ marginBottom: '20px' }}
+      >
         <Form.Check
           id="terms-and-conditions-checkbox"
           type="checkbox"
           checked={toChecked}
           onChange={handleChange}
           label={checkboxLabel}
+          style={{ textAlign: 'left' }}
         />
       </Form.Group>
-      <Button variant="primary" type="submit" disabled={!toChecked}>
+      <Button
+        variant="primary"
+        type="button"
+        disabled={!toChecked}
+        onClick={handleConfirmOrder}
+      >
         Confirm order
       </Button>
     </Form>

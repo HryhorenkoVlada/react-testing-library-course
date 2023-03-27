@@ -28,6 +28,7 @@ const Options = ({ optionType }) => {
         })
         .catch((err) => {
           setError(true);
+          setLoading(false);
         });
     };
     fetchOption();
@@ -47,8 +48,8 @@ const Options = ({ optionType }) => {
   return loading ? (
     <h2>Loading...</h2>
   ) : (
-    <>
-      <h2>{title}</h2>
+    <div style={{ marginBottom: '40px' }}>
+      <h2 style={{ marginBottom: '20px' }}>{title}</h2>
       <p>{formatCurrency(PRICE_PER_ITEM[optionType])} each</p>
       <p>
         {title} total: {orderDetails?.totals[optionType]}
@@ -63,7 +64,7 @@ const Options = ({ optionType }) => {
           />
         ))}
       </Row>
-    </>
+    </div>
   );
 };
 
