@@ -24,12 +24,11 @@ const Options = ({ optionType }) => {
         .get(`http://localhost:3030/${optionType}`)
         .then((res) => {
           setOptions(res.data);
-          setLoading(false);
         })
         .catch((err) => {
           setError(true);
-          setLoading(false);
         });
+      setLoading(false);
     };
     fetchOption();
   }, [optionType]);
