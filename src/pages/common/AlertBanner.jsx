@@ -5,7 +5,7 @@ const AlertBanner = ({
   message = 'An unexpected error ocurred. Please try again later ',
 }) => {
   return (
-    <Alert variant={variant} style={{ backgroundColor: 'red' }}>
+    <Alert variant={variant} style={{ backgroundColor: 'red', color: '#fff' }}>
       {message}
     </Alert>
   );
