@@ -14,24 +14,28 @@ const OrderSummary = ({ setOrderPhase }) => {
   return (
     <div>
       <h1>Order Summary</h1>
-      <h2>Scoops: {totals?.scoops}</h2>
-      <ul>
-        {scoopArray.length !== 0
-          ? scoopArray.map(({ name, value }) => (
+      {scoopArray.length !== 0 ? (
+        <>
+          <h2>Scoops: {totals?.scoops}</h2>
+          <ul>
+            {scoopArray.map(({ name, value }) => (
               <li key={`scoop_${name}_${value}`}>
                 {value} {name}
               </li>
-            ))
-          : null}
-      </ul>
-      <h2>Toppings: {totals?.toppings}</h2>
-      <ul>
-        {toppingsArray.length !== 0
-          ? toppingsArray.map(({ name, value }) => (
+            ))}
+          </ul>
+        </>
+      ) : null}
+      {toppingsArray.length !== 0 ? (
+        <>
+          <h2>Toppings: {totals?.toppings}</h2>
+          <ul>
+            {toppingsArray.map(({ name, value }) => (
               <li key={`topping_${name}_${value}`}>{name}</li>
-            ))
-          : null}
-      </ul>
+            ))}
+          </ul>
+        </>
+      ) : null}
       <SummaryForm setOrderPhase={setOrderPhase} />
     </div>
   );

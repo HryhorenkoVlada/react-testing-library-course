@@ -1,10 +1,19 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import App from '../App';
 
 test('ordder phases for "happy path"', async () => {
   render(<App />);
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryAllByRole('heading', { name: /loading/i })
+  );
 
   // ------------ Order Entry -------------------
 
@@ -36,6 +45,7 @@ test('ordder phases for "happy path"', async () => {
     expect(summaryGrandTotal).toHaveTextContent('3.50');
   });
 
+  expect(orderButton).toBeEnabled();
   userEvent.click(orderButton);
 
   // ------------ Order Summary -------------------
@@ -94,4 +104,41 @@ test('ordder phases for "happy path"', async () => {
 
   const resetToppingsTotal = await screen.findByText(/toppings total/i);
   expect(resetToppingsTotal).toHaveTextContent('0.00');
+});
+
+test('toppings header is not on the page if toppings was not choosed', async () => {
+  render(<App />);
+
+  // ------------ Order Entry -------------------
+
+  const vanillaInput = await screen.findByRole('spinbutton', {
+    name: /vanilla/i,
+  });
+  const chocolateInput = await screen.findByRole('spinbutton', {
+    name: /chocolate/i,
+  });
+  const orderButton = screen.getByRole('button', { name: /order sundae/i });
+
+  userEvent.clear(vanillaInput);
+  userEvent.type(vanillaInput, '1');
+  userEvent.clear(chocolateInput);
+  userEvent.type(chocolateInput, '2');
+
+  const summaryScoopsPrice = await screen.findByText(/scoops total/i);
+
+  await waitFor(() => {
+    expect(summaryScoopsPrice).toHaveTextContent('6.00');
+  });
+
+  userEvent.click(orderButton);
+
+  // ------------ Order Summary -------------------
+
+  const scoopsHeading = screen.getByRole('heading', { name: 'Scoops: $6.00' });
+  expect(scoopsHeading).toBeInTheDocument();
+
+  const toppingsHeading = screen.queryByRole('heading', {
+    name: 'Toppings',
+  });
+  expect(toppingsHeading).not.toBeInTheDocument();
 });
