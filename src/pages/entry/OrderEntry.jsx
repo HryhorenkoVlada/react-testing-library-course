@@ -5,6 +5,7 @@ import { useOrderDetails } from '../../contexts/OrderDetails';
 
 const OrderEntry = ({ setOrderPhase }) => {
   const [orderDetails] = useOrderDetails();
+  const orderDisabled = orderDetails?.totals.scoops === '$0.00';
 
   const handleNextClick = () => {
     setOrderPhase('review');
@@ -18,7 +19,12 @@ const OrderEntry = ({ setOrderPhase }) => {
       <h2 style={{ marginTop: '20px', marginBottom: '20px' }}>
         Grand total: {orderDetails?.totals.grandTotal}
       </h2>
-      <Button variant="primary" type="button" onClick={handleNextClick}>
+      <Button
+        variant="primary"
+        type="button"
+        disabled={orderDisabled}
+        onClick={handleNextClick}
+      >
         Order Sundae!
       </Button>
     </div>
